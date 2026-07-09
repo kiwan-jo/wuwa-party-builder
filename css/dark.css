@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+/* 다크 테마 */
+*{color:#f1f3f5;}
+
+html,body{background:#111315;}
+
+/* 스크롤 */
+::-webkit-scrollbar-track{background:#1d2126;}
+::-webkit-scrollbar-thumb{background:#4b5563; border:2px solid #1d2126;}
+::-webkit-scrollbar-thumb:hover{background:#6b7280;}
+
+/* 카드 / 박스 */
+.char_list li, .own_list li, .party_cont, .layer_popup{background:#252a31; border-color:#3b424c;}
+
+.layer_popup{box-shadow:0 5px 20px rgba(0,0,0,0.45);}
+
+/* 필터 / 버튼 */
+.main_filter > li, .option_btn > li, .popup_btn li, .own_list dt, .own_list dd{border-color:#3b424c; background:#252a31;}
+
+/* 안내 문구 */
+.guide_txt{color:#9ca3af;}
+
+/* 빈 슬롯 */
+.party_cont .cont_body .slot .none{border-color:#4b5563; color:#9ca3af;}
+
+.party_cont .cont_body .slot .none span, .party_cont .cont_body .slot .none p{color:#9ca3af;}
+
+/* 삭제 버튼 */
+.party_btn.del{background:#252a31; color:#ff6b6b; border-color:#ff6b6b;}
+
+/* 캐릭터 삭제 x 버튼 */
+.party_cont .cont_body .slot .done .remove_char{background:#111315; color:#fff;}
