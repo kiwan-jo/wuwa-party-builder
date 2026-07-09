@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="char_list_wrap">
+            <div class="filter_box">
+                <ul class="main_filter" id="mainFilter">
+                    <li class="active" data-filter="all">ALL</li>
+                    <li class="el glacio" data-filter="glacio"></li>    <!-- 응결 -->
+                    <li class="el fusion" data-filter="fusion"></li>    <!-- 용융 -->
+                    <li class="el electro" data-filter="electro"></li>  <!-- 전도 -->
+                    <li class="el aero" data-filter="aero"></li>        <!-- 기류 -->
+                    <li class="el spectro" data-filter="spectro"></li>  <!-- 회절 -->
+                    <li class="el havoc" data-filter="havoc"></li>      <!-- 인멸 -->
+                </ul>
+
+                <ul class="option_btn">
+                    <li class="char_owned" id="ownedFilterBtn">보유만</li>
+                    <li id="ownedPopupBtn">보유설정</li>
+                </ul>
+            </div>
+
+            <ul class="char_list" id="characterList">
+                <!-- JS로 캐릭터 생성 -->
+            </ul>
+        </div>
+
+        <div class="party_list">
+            <div class="list_tit">
+                <h3>파티구성<span class="guide_txt">좌측 캐릭터를 드래그하세요</span></h3>
+                <span class="party_btn" id="resetPartyBtn" style="margin-left:auto;">초기화</span>
+                <span class="party_btn" id="saveBtn" style="margin-left:5px;">메모장 저장</span>
+                <span class="party_btn" id="addPartyBtn" style="margin-left:5px;">파티 추가</span>
+            </div>
+
+            <div class="party_area" id="partyArea">
+                <div class="party_cont">
+                    <div class="cont_body">
+                        <div class="slot" data-party="0" data-slot="0"></div>
+                        <div class="slot" data-party="0" data-slot="1"></div>
+                        <div class="slot" data-party="0" data-slot="2"></div>
+                    </div>
+                    <div class="cont_opt">
+                        <span class="party_btn del">삭제</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layer_dim" id="layerDim"></div>
+
+    <div class="layer_popup" id="ownedPopup">
+        <div class="popup_header">
+            <h3>캐릭 보유여부</h3>
+            <ul class="main_filter" id="">
+                    <li class="active" data-filter="all">ALL</li>
+                    <li class="el glacio" data-filter="glacio"></li>    <!-- 응결 -->
+                    <li class="el fusion" data-filter="fusion"></li>    <!-- 용융 -->
+                    <li class="el electro" data-filter="electro"></li>  <!-- 전도 -->
+                    <li class="el aero" data-filter="aero"></li>        <!-- 기류 -->
+                    <li class="el spectro" data-filter="spectro"></li>  <!-- 회절 -->
+                    <li class="el havoc" data-filter="havoc"></li>      <!-- 인멸 -->
+                </ul>
+        </div>
+        <div class="own_list_div">
+            <ul class="own_list" id="ownList">
+                <!-- characters 에 따른 리스트 생성(스크립트) -->
+            </ul>
+        </div>
+        <ul class="popup_btn">
+            <li class="ok" id="ownedOkBtn">확인</li><li class="cancel" id="ownedCancelBtn">취소</li>
+        </ul>
+    </div>
+</body>
+</html>
