@@ -1,5 +1,7 @@
 // 케릭터 리스트
 const characters = [
+    { id: "jingran", name: "경연", el: "fusion", elList: ["fusion"], maxUse: 1},
+    { id: "qingxiao", name: "청초", el: "aero", elList: ["aero"], maxUse: 1},
     { id: "suisui", name: "수수", el: "glacio", elList: ["glacio"], maxUse: 2},
     { id: "yangyang_xuanling", name: "양양·현령", el: "havoc", elList: ["havoc"], maxUse: 1},
     { id: "lucila", name: "루실라", el: "glacio", elList: ["glacio"], maxUse: 1},
@@ -12,7 +14,7 @@ const characters = [
     { id: "eimes", name: "에이메스", el: "fusion", elList: ["fusion"], maxUse: 1},
     { id: "monie", name: "모니에", el: "fusion", elList: ["fusion"], maxUse: 2},
     { id: "linne", name: "린네", el: "spectro", elList: ["spectro"], maxUse: 1},
-    { id: "chisa", name: "치사", el: "havoc", elList: ["havoc"], maxUse: 2},
+    { id: "chisa", name: "치사", el: "havoc", elList: ["havoc"], maxUse: 1},
     { id: "ciaccona", name: "구원", el: "aero", elList: ["aero"], maxUse: 1},
     { id: "galbrena", name: "갈브레나", el: "fusion", elList: ["fusion"], maxUse: 1},
     { id: "yuno", name: "유노", el: "aero", elList: ["aero"], maxUse: 1},
