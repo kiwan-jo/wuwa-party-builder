@@ -7,7 +7,7 @@ const characters = [
     { id: "lucila", name: "루실라", el: "glacio", elList: ["glacio"], maxUse: 1},
     { id: "lucy", name: "루시", el: "spectro", elList: ["spectro"], maxUse: 1},
     { id: "rebecca", name: "레베카", el: "electro", elList: ["electro"], maxUse: 1},
-    { id: "denia", name: "데니아", el: "fusion", elList: ["fusion"], maxUse: 1},
+    { id: "denia", name: "데니아", el: "fusion", elList: ["fusion"], maxUse: 2},
     { id: "hiyuki", name: "히유키", el: "glacio", elList: ["glacio"], maxUse: 1},
     { id: "sigrika", name: "시그리카", el: "aero", elList: ["aero"], maxUse: 1},
     { id: "luke_hersen", name: "루크·헤르센", el: "spectro", elList: ["spectro"], maxUse: 1},
