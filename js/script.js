@@ -69,6 +69,8 @@ let parties = [
     [null, null, null]
 ];
 
+let partyUsed = [false];
+
 let dragData = null;
 let currentFilter = "all";
 let showOwnedOnly = false;
@@ -86,6 +88,7 @@ function initOwnedMap() {
 function saveLocalData() {
     const data = {
         parties,
+        partyUsed,
         ownedMap,
         currentFilter,
         showOwnedOnly
@@ -108,6 +111,10 @@ function loadLocalData() {
         if (Array.isArray(data.parties) && data.parties.length > 0) {
             parties = data.parties;
         }
+ 
+        if (Array.isArray(data.partyUsed)) {
+            partyUsed = data.partyUsed;
+        }
 
         if (data.ownedMap) {
             ownedMap = data.ownedMap;
@@ -125,6 +132,9 @@ function loadLocalData() {
         ownedMap = {};
     }
 
+    while (partyUsed.length < parties.length) {
+        partyUsed.push(false);
+    }
     initOwnedMap();
 }
 
@@ -229,11 +239,26 @@ function renderParties() {
         partyCont.innerHTML = `
             <div class="cont_body"></div>
             <div class="cont_opt">
+                <label class="used_check">
+                    <input type="checkbox" ${partyUsed[partyIndex] ? "checked" : ""}>
+                    사용완료
+                </label>
+
                 <span class="party_btn del">삭제</span>
             </div>
         `;
 
         const contBody = partyCont.querySelector(".cont_body");
+        const usedCheck = partyCont.querySelector(".used_check input");
+
+        usedCheck.addEventListener("change", e => {
+            partyUsed[partyIndex] = e.target.checked;
+            render();
+        });
+
+        if (partyUsed[partyIndex]) {
+            partyCont.classList.add("used");
+        }
 
         party.forEach((characterId, slotIndex) => {
             const slot = document.createElement("div");
@@ -340,8 +365,10 @@ function renderParties() {
         partyCont.querySelector(".party_btn.del").addEventListener("click", () => {
             if (parties.length === 1) {
                 parties[0] = [null, null, null];
+                partyUsed[0] = false;
             } else {
                 parties.splice(partyIndex, 1);
+                partyUsed.splice(partyIndex, 1);
             }
 
             render();
@@ -459,6 +486,7 @@ document.querySelector("#layerDim").addEventListener("click", () => {
 
 document.querySelector("#addPartyBtn").addEventListener("click", () => {
     parties.push([null, null, null]);
+    partyUsed.push(false);
     render();
 });
 
@@ -500,6 +528,8 @@ document.querySelector("#resetPartyBtn").addEventListener("click", () => {
         [null, null, null]
     ];
 
+    partyUsed = [false];
+    
     render();
 });
 
