@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dark.css" media="(prefers-color-scheme: dark)">
+    <script src="js/circuits.js" defer></script>
     <script src="js/script.js" defer></script>
 </head>
 <body>
@@ -39,24 +40,14 @@
 
         <div class="party_list">
             <div class="list_tit">
-                <h3>파티구성<span class="guide_txt">좌측 캐릭터를 드래그하세요</span></h3>
-                <span class="party_btn" id="resetPartyBtn" style="margin-left:auto;">초기화</span>
-                <span class="party_btn" id="saveBtn" style="margin-left:5px;">메모장 저장</span>
-                <span class="party_btn" id="addPartyBtn" style="margin-left:5px;">파티 추가</span>
+                <h3>파티구성<span class="guide_txt">캐릭터는 슬롯으로 · ☰ 핸들은 파티 순서 이동</span></h3>
+                <button type="button" class="party_btn" id="editCircuitsBtn">회로 편집</button>
+                <button type="button" class="party_btn" id="resetPartyBtn">초기화</button>
+                <button type="button" class="party_btn" id="saveBtn">메모장 저장</button>
+                <button type="button" class="party_btn" id="addPartyBtn">파티 추가</button>
             </div>
 
-            <div class="party_area" id="partyArea">
-                <div class="party_cont">
-                    <div class="cont_body">
-                        <div class="slot" data-party="0" data-slot="0"></div>
-                        <div class="slot" data-party="0" data-slot="1"></div>
-                        <div class="slot" data-party="0" data-slot="2"></div>
-                    </div>
-                    <div class="cont_opt">
-                        <span class="party_btn del">삭제</span>
-                    </div>
-                </div>
-            </div>
+            <div class="party_area" id="partyArea"></div>
         </div>
     </div>
 
@@ -84,5 +75,11 @@
             <li class="ok" id="ownedOkBtn">확인</li><li class="cancel" id="ownedCancelBtn">취소</li>
         </ul>
     </div>
+    <dialog id="circuitDialog" class="circuit_dialog" aria-labelledby="circuitTitle">
+        <div class="circuit_header"><h3 id="circuitTitle">회로 버프 선택</h3><button type="button" id="closeCircuitBtn" aria-label="닫기">×</button></div>
+        <p id="circuitHelp" class="circuit_help"></p>
+        <div id="circuitContent"></div>
+        <div class="circuit_footer" id="circuitFooter"></div>
+    </dialog>
 </body>
 </html>

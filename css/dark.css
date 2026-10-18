@@ -31,3 +31,14 @@ html,body{background:#111315;}
 
 /* 캐릭터 삭제 x 버튼 */
 .party_cont .cont_body .slot .done .remove_char{background:#111315; color:#fff;}
+
+.circuit_dialog{background:#1d2126; border-color:#3b424c; color:#f1f3f5;}
+.circuit_card{background:#252a31; border-color:#3b424c;}
+.circuit_card[aria-pressed="true"]{background:#25374f; border-color:#7eaaff; box-shadow:inset 0 0 0 1px #7eaaff;}
+.circuit_card p,.circuit_footer,.circuit_editor fieldset{border-color:#3b424c;}
+.circuit_help,.circuit_icon,.party_number,.party_handle,.order_buttons button{color:#aebdd2;}
+.circuit_slot{border-color:#4b5563;}
+.circuit_editor input,.circuit_editor textarea,.circuit_editor select{background:#111315; border-color:#4b5563; color:#f1f3f5;}
+.used_btn,.secondary{background:#252a31; color:#c8d3e3; border-color:#4b5563;}
+.used_btn[aria-pressed="true"]{background:#21644e; color:#fff; border-color:#71a38f;}
+.party_cont.drop_target{background:#25374f;}
