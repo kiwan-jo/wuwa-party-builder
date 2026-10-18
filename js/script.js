@@ -76,6 +76,7 @@ const circuits = structuredClone(window.MATRIX_CIRCUITS);
 let dragData = null;
 let currentFilter = "all";
 let showOwnedOnly = false;
+let showUnusedOnly = false;
 let ownedMap = {};
 let tempOwnedMap = {};
 
@@ -94,7 +95,8 @@ function saveLocalData() {
         partyCircuits,
         ownedMap,
         currentFilter,
-        showOwnedOnly
+        showOwnedOnly,
+        showUnusedOnly
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -131,6 +133,9 @@ function loadLocalData() {
         if (typeof data.showOwnedOnly === "boolean") {
             showOwnedOnly = data.showOwnedOnly;
         }
+        if (typeof data.showUnusedOnly === "boolean") {
+            showUnusedOnly = data.showUnusedOnly;
+        }
     } catch (e) {
         parties = [[null, null, null]];
         ownedMap = {};
@@ -159,8 +164,9 @@ function isOwned(characterId) {
 function isVisibleCharacter(character) {
     const filterMatch = currentFilter === "all" || character.elList.includes(currentFilter);
     const ownedMatch = !showOwnedOnly || isOwned(character.id);
+    const unusedMatch = !showUnusedOnly || getRemainUse(character.id) > 0;
 
-    return filterMatch && ownedMatch;
+    return filterMatch && ownedMatch && unusedMatch;
 }
 
 function renderFilters() {
@@ -169,6 +175,9 @@ function renderFilters() {
     });
 
     document.querySelector("#ownedFilterBtn").classList.toggle("active", showOwnedOnly);
+    const unusedButton = document.querySelector("#unusedFilterBtn");
+    unusedButton.classList.toggle("active", showUnusedOnly);
+    unusedButton.setAttribute("aria-pressed", String(showUnusedOnly));
 }
 
 function renderPopupFilters() {
@@ -494,13 +503,24 @@ document.querySelector("#ownedPopup .main_filter").addEventListener("click", e =
     const btn = e.target.closest("li");
     if (!btn) return;
 
-    popupFilter = btn.dataset.filter;
+    popupFilter = popupFilter === btn.dataset.filter ? "all" : btn.dataset.filter;
     renderOwnList();
 });
 
 document.querySelector("#ownedFilterBtn").addEventListener("click", () => {
     showOwnedOnly = !showOwnedOnly;
     render();
+});
+
+document.querySelector("#unusedFilterBtn").addEventListener("click", () => {
+    showUnusedOnly = !showUnusedOnly;
+    render();
+});
+document.querySelector("#unusedFilterBtn").addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.currentTarget.click();
+    }
 });
 
 document.querySelector("#ownedPopupBtn").addEventListener("click", () => {
@@ -534,40 +554,6 @@ document.querySelector("#addPartyBtn").addEventListener("click", () => {
     partyUsed.push(false);
     partyCircuits.push(null);
     render();
-});
-
-document.querySelector("#saveBtn").addEventListener("click", () => {
-    const today = new Date().toISOString().slice(0, 10);
-    let text = "";
-
-    parties.forEach((party, idx) => {
-        text += `파티 ${idx + 1}\n`;
-
-        const names = party
-            .filter(charId => charId)
-            .map(charId => {
-                const character = characters.find(c => c.id === charId);
-                return character.name;
-            });
-
-        const circuit = circuits.find(c => c.id === partyCircuits[idx]);
-        text += `- ${names.join(" / ")}\n`;
-        text += `- 상태: ${partyUsed[idx] ? "사용완료" : "미사용"}\n`;
-        text += `- 회로: ${circuit ? circuit.name : "미선택"}\n\n`;
-    });
-
-    const blob = new Blob([text], {
-        type: "text/plain;charset=utf-8"
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `매트릭스_${today}.txt`;
-    a.click();
-
-    URL.revokeObjectURL(url);
 });
 
 document.querySelector("#resetPartyBtn").addEventListener("click", () => {

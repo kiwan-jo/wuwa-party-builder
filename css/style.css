@@ -140,7 +140,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .popup_header{flex-wrap:wrap; gap:12px; min-width:0;}
 .popup_header h3{font-size:clamp(18px,3vw,24px);}
 .own_list_div{min-height:0; overscroll-behavior:contain;}
-.own_list{display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px;}
+.own_list{display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:8px;}
 .own_list li{width:auto; min-width:0; padding:4px;}
 .own_img{width:100%; height:auto; aspect-ratio:1;}
 .own_img img{display:block; width:100%; height:100%; object-fit:cover;}

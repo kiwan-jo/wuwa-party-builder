@@ -8,16 +8,18 @@ const root = path.join(__dirname, '..');
 
 function app(saved) {
     const storage = new Map(saved ? [['matrixPartySimulator', JSON.stringify(saved)]] : []);
+    const handlers = new Map();
     const context = vm.createContext({
         window: {}, structuredClone,
-        document: { querySelector: () => ({ addEventListener() {} }), addEventListener() {} },
+        document: { querySelector: selector => ({ addEventListener(event, callback) { handlers.set(`${selector}:${event}`, callback); } }), addEventListener() {} },
         localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) }
     });
     vm.runInContext(fs.readFileSync(path.join(root, 'js/circuits.js'), 'utf8'), context);
-    const source = fs.readFileSync(path.join(root, 'js/script.js'), 'utf8').replace(/loadLocalData\(\);\s*render\(\);\s*$/, '');
+    const source = fs.readFileSync(path.join(root, 'js/script.js'), 'utf8').replace(/^loadLocalData\(\);\s*render\(\);/m, '');
     vm.runInContext(source + '\nrender = () => saveLocalData(); loadLocalData();', context);
     return {
         run: code => vm.runInContext(code, context),
+        click: (selector, event = {}) => handlers.get(`${selector}:click`)(event),
         state: () => JSON.parse(vm.runInContext('JSON.stringify({parties, partyUsed, partyCircuits, ownedMap})', context)),
         saved: () => JSON.parse(storage.get('matrixPartySimulator'))
     };
@@ -53,4 +55,45 @@ test('저장 후 다시 불러와도 파티 회로와 사용 상태 유지', () 
     a.run('saveLocalData()');
     const b = app(a.saved());
     assert.deepEqual(b.state(), a.state());
+});
+
+test('보유설정 속성 재클릭은 ALL, 다른 속성 클릭은 해당 속성으로 전환', () => {
+    const a = app();
+    a.run('renderOwnList = () => {}');
+    const choose = filter => a.click('#ownedPopup .main_filter', { target: { closest: () => ({ dataset: { filter } }) } });
+    choose('glacio');
+    assert.equal(a.run('popupFilter'), 'glacio');
+    choose('glacio');
+    assert.equal(a.run('popupFilter'), 'all');
+    choose('fusion');
+    choose('aero');
+    assert.equal(a.run('popupFilter'), 'aero');
+    choose('all');
+    assert.equal(a.run('popupFilter'), 'all');
+});
+
+test('미사용 필터는 남은 횟수 기준으로 표시하고 캐릭터 제거 시 다시 표시', () => {
+    const a = app({ parties: [['jiyan', 'verina', null]] });
+    a.click('#unusedFilterBtn');
+    const visible = id => a.run(`isVisibleCharacter(characters.find(c => c.id === '${id}'))`);
+    assert.equal(visible('jiyan'), false);
+    assert.equal(visible('verina'), true);
+    a.run('parties.push(["verina", null, null])');
+    assert.equal(visible('verina'), false);
+    a.run('parties[1][0] = null');
+    assert.equal(visible('verina'), true);
+    a.click('#unusedFilterBtn');
+    assert.equal(visible('jiyan'), true);
+});
+
+test('미사용·보유·속성 필터를 조합하고 새로고침 후 설정 유지', () => {
+    const a = app({ parties: [['jiyan', null, null]], ownedMap: { jianxin: false }, currentFilter: 'aero', showOwnedOnly: true });
+    a.click('#unusedFilterBtn');
+    const b = app(a.saved());
+    assert.equal(b.run('showUnusedOnly'), true);
+    assert.equal(b.run('isVisibleCharacter(characters.find(c => c.id === "jiyan"))'), false);
+    assert.equal(b.run('isVisibleCharacter(characters.find(c => c.id === "jianxin"))'), false);
+    assert.equal(b.run('isVisibleCharacter(characters.find(c => c.id === "verina"))'), false);
+    assert.equal(b.run('isVisibleCharacter(characters.find(c => c.id === "aalto"))'), true);
+    assert.equal(app().run('showUnusedOnly'), false);
 });
