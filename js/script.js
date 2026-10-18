@@ -243,8 +243,8 @@ function renderParties() {
 
         partyCont.innerHTML = `
             <div class="party_order">
-                <button type="button" class="party_handle" draggable="true" aria-label="${partyIndex + 1}번 파티 순서 이동" title="드래그하여 순서 이동">☰</button>
                 <strong class="party_number">${String(partyIndex + 1).padStart(2, "0")}</strong>
+                <button type="button" class="party_handle" draggable="true" aria-label="${partyIndex + 1}번 파티 순서 이동" title="드래그하여 순서 이동">☰</button>
             </div>
             <div class="cont_body"></div>
             <button type="button" class="circuit_slot" aria-label="${partyIndex + 1}번 파티 회로 선택"></button>
@@ -261,7 +261,13 @@ function renderParties() {
         });
         const circuit = circuits.find(c => c.id === partyCircuits[partyIndex]);
         const circuitSlot = partyCont.querySelector(".circuit_slot");
-        circuitSlot.innerHTML = circuitIcon(circuit?.icon) + '<span></span>';
+        circuitSlot.innerHTML = circuit
+            ? circuitIcon(circuit.icon) + '<span></span>'
+            : `<svg viewBox="0 0 24 24" class="circuit_icon" aria-hidden="true"
+                    fill="none" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14 M5 12h14"></path>
+            </svg><span></span>`;
         circuitSlot.querySelector("span").textContent = circuit?.shortName || "회로 선택";
         circuitSlot.title = circuit ? `${circuit.name}\n${circuit.description}` : "회로 선택";
         circuitSlot.addEventListener("click", () => openCircuitPicker(partyIndex));
@@ -480,7 +486,7 @@ document.querySelector("#mainFilter").addEventListener("click", e => {
 
     if (!filterBtn) return;
 
-    currentFilter = filterBtn.dataset.filter;
+    currentFilter = currentFilter === filterBtn.dataset.filter ? "all" : filterBtn.dataset.filter;
     render();
 });
 
@@ -590,12 +596,12 @@ document.addEventListener("dragend", () => {
 
 function circuitIcon(kind) {
     const paths = {
-        status: '<path d="M12 4 5 8l3 10 4 3 4-3 3-10-7-4Z M9 10l3 2 3-2 M12 12v5"/>',
-        damage: '<path d="m5 19 12-12 3-3-1 6L7 22 M4 15l5 5 M14 4l1-2 M20 14l2 1"/>',
-        harmony: '<path d="m12 2 2 7 7-4-4 7 5 3-8 1-2 6-2-6-8-1 5-3-4-7 7 4Z"/>',
-        general: '<path d="m4 4 16 16 M20 4 4 20 M3 8l5-5 M16 21l5-5 M3 16l5 5 M16 3l5 5"/>'
+        buff_01: 'images/buff_01.png',
+        buff_02: 'images/buff_02.png',
+        buff_03: 'images/buff_03.png',
+        buff_04: 'images/buff_04.png'
     };
-    return `<svg viewBox="0 0 24 24" class="circuit_icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${paths[kind] || '<path d="M12 5v14 M5 12h14"/>'}</svg>`;
+    return `<img src="${paths[kind]}">`;
 }
 
 const circuitDialog = document.querySelector("#circuitDialog");
@@ -638,12 +644,12 @@ function openCircuitPicker(partyIndex) {
         });
         content.appendChild(button);
     });
-    dialogButton("취소", () => circuitDialog.close());
     dialogButton("확인", () => {
         partyCircuits[partyIndex] = selected;
         render();
         circuitDialog.close();
     }, true);
+    dialogButton("취소", () => circuitDialog.close());
 }
 
 function render() {
@@ -655,3 +661,140 @@ function render() {
 
 loadLocalData();
 render();
+
+document.querySelector("#saveImageBtn").addEventListener("click", async () => {
+    const capture = document.createElement("div");
+
+    capture.style.cssText = `
+        position: fixed;
+        left: -9999px;
+        top: 0;
+        width: 1200px;
+        padding: 30px;
+        background: #0b0b10;
+        color: white;
+        font-family: Arial, sans-serif;
+    `;
+
+    const today = new Date().toLocaleDateString("ko-KR");
+
+    /*
+    capture.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #333;">
+            <div>
+                <h1 style="color:white; font-size:28px; margin:0;">
+                명조 매트릭스 파티 빌더
+            </h1>
+            <p style="color:#999; margin-top:8px;">
+                명조: 워더링 웨이브 종말 매트릭스 파티 편성표
+            </p>
+            </div>
+            <strong style="color:#ffbf00;">${today}</strong>
+        </div>
+        
+
+        <div id="captureParties"
+             style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        </div>
+    `;
+    */
+
+    capture.innerHTML = `
+        <div id="captureParties"
+            style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        </div>
+    `;
+
+    const partyContainer = capture.querySelector("#captureParties");
+
+    parties.forEach((party, index) => {
+        const circuit = circuits.find(c => c.id === partyCircuits[index]);
+
+        const card = document.createElement("div");
+
+        card.style.cssText = `
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:12px;
+            padding:20px;
+            background:#15151d;
+            border:1px solid #30303a;
+            border-radius:16px;
+        `;
+
+        let html = `
+            <strong style="color:#777; font-size:22px; margin-right:12px;">
+                ${String(index + 1).padStart(2, "0")}
+            </strong>
+        `;
+
+        party.forEach(characterId => {
+            const character = characters.find(c => c.id === characterId);
+
+            html += `
+                <div style="width:90px; text-align:center;">
+                    <div style="height:90px; border:1px solid #333;
+                                border-radius:10px; overflow:hidden;">
+                        ${character
+                            ? `<img src="images/${character.id}.png"
+                                    style="width:100%; height:100%; object-fit:cover;">`
+                            : `<div style="color:#666; padding-top:35px;">+</div>`
+                        }
+                    </div>
+                    <p style="color:white; font-size:12px; margin-top:5px;">
+                        ${character ? character.name : "-"}
+                    </p>
+                </div>
+            `;
+        });
+
+        html += `
+            <div style="width:90px; text-align:center;">
+                <div style="height:90px; display:flex; align-items:center;
+                            justify-content:center; border:1px solid #333;
+                            border-radius:10px;">
+                    ${circuit
+                        ? circuitIcon(circuit.icon).replace('<img ', '<img style="width:64px; height:64px; object-fit:contain;" ')
+                        : `<span style="color:#666;">+</span>`
+                    }
+                </div>
+                <p style="color:white; font-size:12px; margin-top:5px;">
+                    ${circuit ? circuit.shortName : "-"}
+                </p>
+            </div>
+        `;
+
+        card.innerHTML = html;
+        partyContainer.appendChild(card);
+    });
+
+    document.body.appendChild(capture);
+
+    try {
+        await Promise.all(
+            Array.from(capture.querySelectorAll("img")).map(img => {
+                if (img.complete) return Promise.resolve();
+
+                return new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+            })
+        );
+
+        const canvas = await html2canvas(capture, {
+            backgroundColor: "#0b0b10",
+            scale: 2
+        });
+
+        const link = document.createElement("a");
+        link.download = `매트릭스_파티_${today.replace(/\.\s*/g, "-").replace(/-$/, "")}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+    } finally {
+        capture.remove();
+    }
+});
