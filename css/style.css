@@ -118,16 +118,19 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .circuit_slot span{font-size:14px; overflow-wrap:anywhere; line-height:1.4;}
 .circuit_slot .circuit_icon{width:40px; height:40px;}
 .circuit_icon{width:38px; height:38px; flex-shrink:0; color:#526079;}
-.circuit_dialog{margin:auto; width:min(720px, calc(100% - 24px)); max-height:calc(100dvh - 40px); border:1px solid #bcc3d3; border-radius:14px; padding:24px; background:#fff; color:#333; overflow-y:auto;}
+.circuit_dialog{margin:auto; width:min(1280px, calc(100% - 24px)); max-height:calc(100dvh - 40px); border:1px solid #bcc3d3; border-radius:14px; padding:24px; background:#fff; color:#333; overflow-y:auto;}
+.circuit_dialog[open]{display:flex; flex-direction:column;}
+.circuit_header,.circuit_help,.circuit_footer{flex-shrink:0;}
 .circuit_dialog::backdrop{background:rgba(0,0,0,.65);}
 .circuit_header{display:flex; align-items:center; justify-content:space-between; gap:12px;}
 .circuit_header h3{font-size:21px;}
 .circuit_header button{border:0; background:transparent; cursor:pointer; font-size:28px; padding:0 6px;}
 .circuit_help{font-size:13px; color:#687992; margin:8px 0 20px; line-height:1.7;}
-.circuit_grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
-.circuit_card{text-align:left; background:#f7f8fb; border:1px solid #d5dbe5; border-radius:10px; padding:16px; cursor:pointer; display:flex; flex-wrap:wrap; align-items:center; gap:10px; overflow-wrap:anywhere;}
-.circuit_card strong{flex:1; min-width:0; font-size:14px;}
-.circuit_card p{width:100%; white-space:pre-wrap; font-size:13px; line-height:1.7; border-top:1px solid #d5dbe5; padding-top:10px;}
+.circuit_grid{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(240px,1fr); grid-template-rows:minmax(min-content,1fr); gap:14px; min-height:0; overflow:auto; padding:4px 4px 14px; scroll-snap-type:x proximity; overscroll-behavior:contain;}
+.circuit_card{text-align:left; background:#f7f8fb; border:1px solid #d5dbe5; border-radius:10px; padding:0; cursor:pointer; display:grid; grid-template-rows:112px 60px 1fr; align-items:start; overflow-wrap:anywhere; scroll-snap-align:start;}
+.circuit_card > .circuit_icon{width:64px; height:64px; align-self:center; justify-self:center;}
+.circuit_card strong{display:flex; align-items:center; justify-content:center; align-self:stretch; min-width:0; padding:8px 12px; font-size:16px; text-align:center; background:#e5e9f0; border-block:1px solid #d5dbe5;}
+.circuit_card p{width:100%; white-space:pre-wrap; font-size:14px; line-height:1.85; padding:18px 16px 24px; margin:0;}
 .circuit_card[aria-pressed="true"]{border-color:#356bc5; box-shadow:inset 0 0 0 1px #356bc5; background:#edf3ff;}
 .circuit_footer{display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-top:20px; border-top:1px solid #d5dbe5; padding-top:16px;}
 .secondary{background:transparent; border-color:#bcc3d3; color:#526079;}
@@ -171,7 +174,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
     .cont_opt .party_btn{width:100%; min-height:36px; height:auto; line-height:1.5; padding:7px 4px;}
     .party_cont .cont_body .slot .done .remove_char{width:24px; height:24px; line-height:24px; font-size:16px;}
     .circuit_dialog{padding:16px;}
-    .circuit_grid{grid-template-columns:1fr;}
+    .circuit_grid{grid-auto-columns:minmax(240px,80%);}
     .circuit_footer{display:grid; grid-template-columns:repeat(2,minmax(0,1fr));}
     .circuit_footer .party_btn{font-size:13px; padding:8px 6px;}
     .char_list{grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:6px; padding:0 10px 12px;}
