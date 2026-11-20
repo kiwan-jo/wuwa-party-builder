@@ -1,5 +1,5 @@
 // 케릭터 리스트
-const characters = [lily
+const characters = [
     { id: "lily", name: "릴리", el: "spectro", elList: ["spectro"], maxUse: 2},
     { id: "suoming", name: "쇄명", el: "electro", elList: ["electro"], maxUse: 1},
     { id: "hsin", name: "여우의 별자리", el: "electro", elList: ["electro"], maxUse: 1},
